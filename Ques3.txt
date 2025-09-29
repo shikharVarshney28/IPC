@@ -1,0 +1,25 @@
+class Solution {
+    void dfs(char grid[][], int i, int j, boolean used[][]) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0' || used[i][j])
+            return;
+        used[i][j] = true;
+        dfs(grid, i + 1, j, used);
+        dfs(grid, i - 1, j, used);
+        dfs(grid, i, j + 1, used);
+        dfs(grid, i, j - 1, used);
+    }
+
+    public int numIslands(char[][] grid) {
+        boolean used[][] = new boolean[grid.length][grid[0].length];
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (!used[i][j] && grid[i][j] == '1') {
+                    count++;
+                    dfs(grid, i, j, used);
+                }
+            }
+        }
+        return count;
+    }
+}
