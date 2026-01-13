@@ -1,0 +1,13 @@
+class Solution {
+    public int maxProfit(int[] nums) {
+        int max = nums[nums.length-1],ans=0;
+        for(int i=nums.length-2;i>=0;i--){
+            if(nums[i] > max){
+                max = nums[i];
+            }else{
+                ans = Math.max(ans,max-nums[i]);
+            }
+        }
+        return ans;
+    }
+}
