@@ -1,3 +1,4 @@
+brute Forces Sol
 class Solution {
     public int firstMissingPositive(int[] nums) {
         HashSet<Integer> h=new HashSet<>();
@@ -9,5 +10,30 @@ class Solution {
             k++;
         }
         return k;
+    }
+}
+
+Optimal Solution
+class Solution {
+    void swap(int nums[], int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n;) {
+            int cI = nums[i] - 1;
+            if (nums[i] >= 1 && nums[i] <= n && nums[cI] != nums[i]) {
+                swap(nums, cI, i);
+            } else
+                i++;
+        }
+        for (int i = 0; i < n; i++) {
+            if (i + 1 != nums[i])
+                return i + 1;
+        }
+        return n+1;
     }
 }
