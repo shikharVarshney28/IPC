@@ -1,0 +1,12 @@
+class Solution {
+    public void deleteMid(Stack<Integer> s) {
+        // code here
+        int middle = s.size()/2;
+        Stack<Integer>st = new Stack<>();
+        while(middle-->0){
+            st.push(s.pop());
+        }
+        s.pop();
+        while(st.size()>0) s.push(st.pop());
+    }
+}

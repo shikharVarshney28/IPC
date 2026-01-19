@@ -1,0 +1,19 @@
+class Solution {
+    // public String reverse(String S) {
+    //     // code here
+    //     StringBuilder t = new StringBuilder(S);
+    //     t = t.reverse();
+    //     return t.toString();
+    // }
+    
+    
+    public String reverse(String S) {
+        Stack<Character>st = new Stack<>();
+        for(char ch : S.toCharArray()){
+            st.push(ch);
+        }
+        StringBuilder t = new StringBuilder();
+        while(st.size()>0) t.append(st.pop());
+        return t.toString();
+    }
+}

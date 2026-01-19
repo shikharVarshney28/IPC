@@ -1,0 +1,15 @@
+
+class Solution {
+    public static int[] help_classmate(int arr[], int n) {
+        int ans[]=new int[n];
+        ans[n-1] = -1;
+        Stack<Integer>st = new Stack<>();
+        st.push(arr[n-1]);
+        for(int i=n-2;i>=0;i--){
+            while(st.size()>0 && st.peek() >= arr[i]) st.pop();
+            ans[i] = st.size()== 0 ? -1 : st.peek();
+            st.push(arr[i]);
+        }
+        return ans;
+    }
+}
