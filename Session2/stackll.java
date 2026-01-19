@@ -61,7 +61,11 @@ public class stackll {
         st.push(10);
         System.out.println(st.peek()+"\n"+st.isEmpty());
         System.out.println(st.size());
-        System.out.println(st.pop());
-        System.out.println(st.pop());
+        st.push(14);
+        st.push(18);
+        System.out.println(st.peek());
+        System.out.println(st.size);
+        // System.out.println(st.pop());
+        // System.out.println(st.pop());
     }
 }
