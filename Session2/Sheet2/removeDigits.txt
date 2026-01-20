@@ -1,0 +1,29 @@
+class Solution {
+    public String removeKdigits(String num, int k) {
+        int nonZero=0;
+        //if no of nonZeros is less then or equal to k 
+        for(char ch : num.toCharArray()){
+            if(ch != '0') nonZero++;
+        }
+        if(nonZero <= k) return "0";
+        Stack<Character>st = new Stack<>();
+        for(char ch : num.toCharArray()){
+            while(st.size()>0 && k > 0 && st.peek() > ch){
+                st.pop();
+                k--;
+            }
+            st.push(ch);
+        }
+        System.out.print(st);
+        String s="";
+        //if still is k not zero--> reomve to ele-->largets no of top
+        while(k-->0) st.pop();
+        while(st.size()>0){
+            s=st.pop() + s;
+        }
+        int idx=0;
+        //remove trailing zeros
+        while(s.charAt(idx) == '0') idx++;
+        return s.substring(idx);
+    }
+}
