@@ -11,7 +11,7 @@ public class implementation {
         sgt.updateRange(2, 4, 4);
         System.out.println(sgt.getQueryAns(0, arr.length - 1, 2, 4, 0));
 
-        // ----------RangeFreq------------
+        // -----------RangeFreq--------------
         RangeFreqQuery rgq = new RangeFreqQuery(arr);
         System.out.println("freq of {4} : " + rgq.query(2, 4, 4));
 
