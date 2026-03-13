@@ -8,7 +8,7 @@ public class implementation {
         sgt.display();
         System.out.println();
         System.out.println(sgt.getQueryAns(0, arr.length - 1, 2, 4, 0));
-        sgt.update(0, arr.length - 1, 0, 2, 4, 10);
+        sgt.updateRange(2, 4, 4);
         System.out.println(sgt.getQueryAns(0, arr.length - 1, 2, 4, 0));
 
         // ----------RangeFreq------------
@@ -16,15 +16,16 @@ public class implementation {
         System.out.println("freq of {4} : " + rgq.query(2, 4, 4));
 
         // -----------RangeMinQuery------------
-        // int st[] = rangeMinQuery.constructST(arr, arr.length-1);
-        // System.out.println("Min in range [2, 4]: " + rangeMinQuery.RMQ(st, arr.length-1, 2, 4));
+        rangeMinQuery rmq = new rangeMinQuery();
+        int st[] = rmq.constructST(arr, arr.length);
+        System.out.println("min in range {2,4} : " + rmq.RMQ(st, arr.length, 2, 4));
 
-        
     }
 }
 
 class SegmentTree {
     int arr[];
+    int lazy[];
 
     public SegmentTree(int n) {
         arr = new int[4 * n];
@@ -71,17 +72,35 @@ class SegmentTree {
         return getQueryAns(l, mid, start, end, 2 * rootIdx + 1) + getQueryAns(mid + 1, r, start, end, 2 * rootIdx + 2);
     }
 
-    void update(int l, int r, int rootidx, int st, int end, int val) {
+    public void updateRange(int st, int end, int val) {
+        lazy = new int[arr.length];
+        update(0, arr.length / 4 - 1, 0, st, end, val);
+
+    }
+
+    private void update(int l, int r, int root, int st, int end, int val) {
+        if (lazy[root] != 0) {
+            arr[root] += (r - l + 1) * lazy[root];
+            if (l != r) {
+                lazy[2 * root + 1] += lazy[root];
+                lazy[2 * root + 2] += lazy[root];
+            }
+            lazy[root] = 0;
+        }
         if (l > end || r < st)
             return;
         if (l >= st && r <= end) {
-            arr[rootidx] += val;
+            arr[root] += (r - l + 1) * val;
+            if (l != r) {
+                lazy[2 * root + 1] += val;
+                lazy[2 * root + 2] += val;
+            }
             return;
         }
         int mid = (l + r) / 2;
-        update(l, mid, 2 * rootidx + 1, st, end, val);
-        update(mid + 1, r, 2 * rootidx + 2, st, end, val);
-        arr[rootidx] = arr[2 * rootidx + 1] + arr[2 * rootidx + 2];
+        update(l, mid, 2 * root + 1, st, end, val);
+        update(mid + 1, r, 2 * root + 2, st, end, val);
+        arr[root] = arr[2 * root + 1] + arr[2 * root + 2];
     }
 }
 
@@ -152,43 +171,42 @@ class RangeFreqQuery {
 }
 
 class rangeMinQuery {
-    static segmentTree s;
-
-    public static int[] constructST(int arr[], int n) {
+    segmentTree s;
+    public int[] constructST(int arr[], int n) {
         s = new segmentTree(n);
         s.build(0, n - 1, arr, 0);
         return s.arr;
     }
 
-    public static int RMQ(int st[], int n, int l, int r) {
+    public int RMQ(int st[], int n, int l, int r) {
         return s.find(0, n - 1, 0, l, r);
     }
-}
 
-class segmentTree {
-    int arr[];
+    class segmentTree {
+        int arr[];
 
-    segmentTree(int n) {
-        arr = new int[4 * n];
-    }
-
-    void build(int l, int r, int[] nums, int root) {
-        if (l == r) {
-            arr[root] = nums[l];
-            return;
+        segmentTree(int n) {
+            arr = new int[4 * n];
         }
-        int mid = (l + r) / 2;
-        build(l, mid, nums, 2 * root + 1);
-        build(mid + 1, r, nums, 2 * root + 2);
-        arr[root] = Math.min(arr[2 * root + 1], arr[2 * root + 2]);
-    }
 
-    int find(int l, int r, int root, int st, int end) {
-        if (l > end || r < st)
-            return Integer.MAX_VALUE;
-        if (l >= st && r <= end)
-            return arr[root];
-        int mid = (l + r) / 2;
-        return Math.min(find(l, mid, 2 * root + 1, st, end), find(mid + 1, r, 2 * root + 2, st, end));
+        void build(int l, int r, int[] nums, int root) {
+            if (l == r) {
+                arr[root] = nums[l];
+                return;
+            }
+            int mid = (l + r) / 2;
+            build(l, mid, nums, 2 * root + 1);
+            build(mid + 1, r, nums, 2 * root + 2);
+            arr[root] = Math.min(arr[2 * root + 1], arr[2 * root + 2]);
+        }
+
+        int find(int l, int r, int root, int st, int end) {
+            if (l > end || r < st)
+                return Integer.MAX_VALUE;
+            if (l >= st && r <= end)
+                return arr[root];
+            int mid = (l + r) / 2;
+            return Math.min(find(l, mid, 2 * root + 1, st, end), find(mid + 1, r, 2 * root + 2, st, end));
+        }
     }
 }
