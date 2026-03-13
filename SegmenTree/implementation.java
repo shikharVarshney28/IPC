@@ -14,6 +14,12 @@ public class implementation {
         // ----------RangeFreq------------
         RangeFreqQuery rgq = new RangeFreqQuery(arr);
         System.out.println("freq of {4} : " + rgq.query(2, 4, 4));
+
+        // -----------RangeMinQuery------------
+        // int st[] = rangeMinQuery.constructST(arr, arr.length-1);
+        // System.out.println("Min in range [2, 4]: " + rangeMinQuery.RMQ(st, arr.length-1, 2, 4));
+
+        
     }
 }
 
@@ -142,5 +148,47 @@ class RangeFreqQuery {
         Node() {
             hmap = new HashMap<>();
         }
+    }
+}
+
+class rangeMinQuery {
+    static segmentTree s;
+
+    public static int[] constructST(int arr[], int n) {
+        s = new segmentTree(n);
+        s.build(0, n - 1, arr, 0);
+        return s.arr;
+    }
+
+    public static int RMQ(int st[], int n, int l, int r) {
+        return s.find(0, n - 1, 0, l, r);
+    }
+}
+
+class segmentTree {
+    int arr[];
+
+    segmentTree(int n) {
+        arr = new int[4 * n];
+    }
+
+    void build(int l, int r, int[] nums, int root) {
+        if (l == r) {
+            arr[root] = nums[l];
+            return;
+        }
+        int mid = (l + r) / 2;
+        build(l, mid, nums, 2 * root + 1);
+        build(mid + 1, r, nums, 2 * root + 2);
+        arr[root] = Math.min(arr[2 * root + 1], arr[2 * root + 2]);
+    }
+
+    int find(int l, int r, int root, int st, int end) {
+        if (l > end || r < st)
+            return Integer.MAX_VALUE;
+        if (l >= st && r <= end)
+            return arr[root];
+        int mid = (l + r) / 2;
+        return Math.min(find(l, mid, 2 * root + 1, st, end), find(mid + 1, r, 2 * root + 2, st, end));
     }
 }
