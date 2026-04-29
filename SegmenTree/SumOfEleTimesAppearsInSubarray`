@@ -1,0 +1,28 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class TwoArrayAndItsMinSum_1165_E {
+    static long mod = 998244353;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        long arr[] = new long[n];
+        for (int i = 0; i < n; i++) {
+            long x = sc.nextLong();
+            arr[i] = (x * (i + 1) * (n - i));
+        }
+        Long brr[] = new Long[n];
+        for (int i = 0; i < n; i++)
+            brr[i] = sc.nextLong();
+        Arrays.sort(arr);
+        Arrays.sort(brr, Collections.reverseOrder());
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans = (ans + (arr[i] % mod) * (brr[i] % mod)) % mod;
+        }
+        System.out.println(ans);
+
+    }
+}
